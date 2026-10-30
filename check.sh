@@ -11,9 +11,15 @@ work=$(mktemp -d)
 trap 'kill $server 2>/dev/null || true; rm -rf "$work"' EXIT
 
 cp -r app "$work/app"
-php -S "localhost:$port" "$work/app/index.php" >/dev/null 2>&1 &
-server=$!
-until curl -s "localhost:$port/reset" >/dev/null; do :; done
+
+# Restarted after each patch, so that no cache serves the old code.
+start() {
+  php -S "localhost:$port" "$work/app/index.php" >/dev/null 2>&1 &
+  server=$!
+  until curl -s "localhost:$port/reset" >/dev/null; do :; done
+}
+stop() { kill $server; wait $server 2>/dev/null || true; }
+start
 
 cabal build --enable-tests lockstep >/dev/null
 
@@ -32,7 +38,7 @@ expect() {
 }
 
 expect '[Sell 1,Expire,Reverse]'
-patch -s -p1 -d "$work" < fixes/1-expired-cards.diff
+stop; patch -s -p1 -d "$work" < fixes/1-expired-cards.diff; start
 expect '[Sell 1,Redeem 1,Reverse,Reverse]'
-patch -s -p1 -d "$work" < fixes/2-double-reverse.diff
+stop; patch -s -p1 -d "$work" < fixes/2-double-reverse.diff; start
 expect '+++ OK, passed 1000 tests.'
