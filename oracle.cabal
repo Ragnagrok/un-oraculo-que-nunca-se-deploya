@@ -1,0 +1,25 @@
+cabal-version:   3.0
+name:            oracle
+version:         0.1.0.0
+synopsis:        Proof of concept: a Haskell model as the test oracle of a PHP system
+license:         MIT
+license-file:    LICENSE
+author:          Federico Sawady
+build-type:      Simple
+
+common comun
+  default-language: Haskell2010
+  ghc-options:      -Wall
+  build-depends:    base >=4.18 && <5
+
+library
+  import:          comun
+  hs-source-dirs:  model
+  exposed-modules: Model
+
+test-suite lockstep
+  import:          comun
+  type:            exitcode-stdio-1.0
+  hs-source-dirs:  test
+  main-is:         Lockstep.hs
+  build-depends:   oracle, QuickCheck >=2.14, http-client, bytestring
