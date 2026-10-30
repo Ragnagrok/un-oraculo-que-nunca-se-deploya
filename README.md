@@ -1,8 +1,8 @@
 # An Oracle That Never Ships
 
 Proof of concept for the article *An Oracle That Never Ships*
-([English](https://blog.ragnagrok.com/en/2026-10-31-un-oraculo-que-nunca-se-deploya) ·
-[español](https://blog.ragnagrok.com/es/2026-10-31-un-oraculo-que-nunca-se-deploya)):
+([English](https://blog.ragnagrok.com/en/2026-10-30-un-oraculo-que-nunca-se-deploya) ·
+[español](https://blog.ragnagrok.com/es/2026-10-30-un-oraculo-que-nunca-se-deploya)):
 a small model of a gift card, written in Haskell, used **only** as a test oracle for a system
 written in PHP. The model never runs in production.
 
